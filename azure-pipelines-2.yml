@@ -15,7 +15,7 @@ variables:
   buildConfiguration: 'Release'
   dotNetFramework: 'net6.0'
   dotNetVersion: '6.0.300'
-  targetRuntime: 'linux-x64'
+  targetRuntime: 'windows-x64'
 
 stages:
 - stage: 'Build'
@@ -28,12 +28,7 @@ stages:
     - script: dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)
       displayName: Publish Project 
   
-    - task: Npm@1
-      displayName: Test UI
-      inputs:
-        command: 'custom'
-        workingDir: 'ClientApp'
-        customCommand: 'run test --watch=false'
+  
 
     - task: PublishBuildArtifacts@1
       inputs:
