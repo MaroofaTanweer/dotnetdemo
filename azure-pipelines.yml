@@ -9,7 +9,7 @@ trigger:
 - master
 
 pool:
-  name: Demo
+  name: myPool2
 
 variables:
   buildConfiguration: 'Release'
