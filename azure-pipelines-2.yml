@@ -29,7 +29,7 @@ stages:
       displayName: Publish Project 
     
     - task: Npm@1
-      displayName: Test UI
+      displayName: 'Test UI'
       inputs:
         command: 'custom'
         workingDir: 'ClientApp'
