@@ -67,7 +67,7 @@ stages:
               inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: 'SP_Con'   #Azure Service connection name
-               appType: 'webApp'
+               appType: 'webAppLinux'
                WebAppName: $(appName)
                packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
                
@@ -89,7 +89,7 @@ stages:
               inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: 'SP_Con'
-               appType: 'webApp'
+               appType: 'webAppLinux'
                WebAppName: $(appName)
                packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
 
