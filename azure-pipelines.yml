@@ -11,7 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  azureSPNName: 'Azure' 
+  azureSPNName: 'SP_Con' 
   azureAppServiceName: 'bermtecdev'
   artifactName: drop
   appName: 'bermtecdev'
