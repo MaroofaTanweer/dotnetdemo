@@ -7,13 +7,17 @@ trigger:
 - '*'
 
 pool:
-  name: batch6
+  name: myPool2
 
 variables:
   buildConfiguration: 'Release'
   azureSPNName: 'Azure' 
   azureAppServiceName: 'bermtecdev'
   artifactName: drop
+  appName: 'bermtecdev'
+  isMaster: $[eq(variables['Build.SourceBranch'], 'refs/head/master')]
+  isDev: $[eq(variables['Build.SourceBranch'], 'refs/head/develop')]
+  
 
 stages:
 - stage: 'Build'
@@ -47,12 +51,12 @@ stages:
 
  - stage: 'DeployDev'
    displayName: 'Deploy to Dev'
-   variables: 
-     appName: 'bermtecdev'
+   condition: and(succeeded(), eq(variables.isDev, 'true'))
    jobs:
-   - deployment: 'Dev'
+   - deployment: 'DeployWeb'
+     displayName: Deploy web app
      pool:
-       name: test
+       name: myPool2
      environment: 'Dev'
      strategy: 
         runOnce:     
@@ -62,7 +66,29 @@ stages:
               displayName: 'Deploy .NET Code to Azure App Service '
               inputs:
                ConnectionType: 'AzureRM'
-               azureSubscription: 'Azure'
+               azureSubscription: 'SP_Con'   #Azure Service connection name
+               appType: 'webApp'
+               WebAppName: $(appName)
+               packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
+               
+  - stage: 'DeployTest'
+   displayName: 'Deploy to Test'
+   condition: and(succeeded(), eq(variables.isMaster, 'true'))
+   jobs:
+   - deployment: 'DeployWeb'
+     displayname: deploy to web
+     pool:
+       name: myPool2
+     environment: 'Test'
+     strategy: 
+        runOnce:     
+         deploy:
+           steps:
+            - task: AzureRmWebAppDeployment@4
+              displayName: 'Deploy .NET Code to Azure App Service '
+              inputs:
+               ConnectionType: 'AzureRM'
+               azureSubscription: 'SP_Con'
                appType: 'webApp'
                WebAppName: $(appName)
                packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
