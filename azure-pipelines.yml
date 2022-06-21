@@ -16,7 +16,7 @@ variables:
   artifactName: drop
   appName: 'bermtecdev'
   isMaster: $[eq(variables['Build.SourceBranch'], 'refs/head/master')]
-  isDev: $[eq(variables['Build.SourceBranch'], 'refs/head/develop')]
+  isDev: $[eq(variables['Build.SourceBranch'], 'refs/head/developCICD')]
   
 
 stages:
