@@ -50,46 +50,46 @@ stages:
 #     appName: $(azureAppServiceName) #App Service's unique name
 #     package: $(Build.ArtifactStagingDirectory)/**/*.zip
 
- - stage: 'DeployDev'
-   displayName: 'Deploy to Dev'
-   condition: and(succeeded(), eq(variables.isDev, 'true'))
-   jobs:
-   - deployment: 'DeployWeb'
-     displayName: Deploy web app
-     pool:
-       name: mypool
-     environment: 'Dev'
-     strategy: 
-        runOnce:     
-         deploy:
-           steps:
-            - task: AzureRmWebAppDeployment@4
-              displayName: 'Deploy .NET Code to Azure App Service '
-              inputs:
-               ConnectionType: 'AzureRM'
-               azureSubscription: 'SP_Con'   #Azure Service connection name
-               appType: 'webAppLinux'
-               WebAppName: $(appName)
-               packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
+- stage: 'DeployDev'
+  displayName: 'Deploy to Dev'
+  condition: and(succeeded(), eq(variables.isDev, 'true'))
+  jobs:
+  - deployment: 'DeployWeb'
+    displayName: Deploy web app
+    pool:
+      name: mypool
+    environment: 'Dev'
+    strategy: 
+      runOnce:     
+        deploy:
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy .NET Code to Azure App Service '
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'SP_Con'   #Azure Service connection name
+              appType: 'webAppLinux'
+              WebAppName: $(appName)
+              packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
                
-  - stage: 'DeployTest'
-   displayName: 'Deploy to Test'
-   condition: and(succeeded(), eq(variables.isMaster, 'true'))
-   jobs:
-   - deployment: 'DeployWeb'
-     displayname: deploy to web
-     pool:
-       name: mypool
-     environment: 'Test'
-     strategy: 
-        runOnce:     
-         deploy:
-           steps:
-            - task: AzureRmWebAppDeployment@4
-              displayName: 'Deploy .NET Code to Azure App Service '
-              inputs:
-               ConnectionType: 'AzureRM'
-               azureSubscription: 'SP_Con'
-               appType: 'webAppLinux'
-               WebAppName: $(appName1)
-               packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
+- stage: 'DeployTest'
+  displayName: 'Deploy to Test'
+  condition: and(succeeded(), eq(variables.isMaster, 'true'))
+  jobs:
+  - deployment: 'DeployWeb'
+    displayname: deploy to web
+    pool:
+      name: mypool
+    environment: 'Test'
+    strategy: 
+      runOnce:     
+        deploy:
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy .NET Code to Azure App Service '
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'SP_Con'
+              appType: 'webAppLinux'
+              WebAppName: $(appName1)
+              packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
