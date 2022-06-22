@@ -16,8 +16,8 @@ variables:
   artifactName: drop
   appName: 'dotnet-app-dev'
   appName1: 'dotnet-app-test'
-  isMaster: $[eq(variables['Build.SourceBranch'], 'refs/head/master')]
-  isDev: $[eq(variables['Build.SourceBranch'], 'refs/head/develop')]
+  isMaster: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  isDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
   
 
 stages:
