@@ -52,7 +52,7 @@ stages:
 
 - stage: 'DeployDev'
   displayName: 'Deploy to Dev'
-  condition: and(succeeded(), eq(variables.isDev, 'true'))
+  condition: and(succeeded(), eq(variables.isMaster, 'true'))
   jobs:
   - deployment: 'DeployWeb'
     displayName: Deploy web app
