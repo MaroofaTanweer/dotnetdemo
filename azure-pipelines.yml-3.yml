@@ -17,7 +17,7 @@ variables:
   appName: 'dotnet-app-dev'
   appName1: 'dotnet-app-test'
   isMaster: $[eq(variables['Build.SourceBranch'], 'refs/head/master')]
-  isDev: $[eq(variables['Build.SourceBranch'], 'refs/head/develop')]
+  isDev: $[eq(variables['Build.SourceBranch'], 'refs/head/CICD')]
   
 
 stages:
