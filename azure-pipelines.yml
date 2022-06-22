@@ -7,7 +7,7 @@ trigger:
 - '*'
 
 pool:
-  name: myPool2
+  name: mypool
 
 variables:
   buildConfiguration: 'Release'
@@ -57,7 +57,7 @@ stages:
    - deployment: 'DeployWeb'
      displayName: Deploy web app
      pool:
-       name: myPool2
+       name: mypool
      environment: 'Dev'
      strategy: 
         runOnce:     
@@ -79,7 +79,7 @@ stages:
    - deployment: 'DeployWeb'
      displayname: deploy to web
      pool:
-       name: myPool2
+       name: mypool
      environment: 'Test'
      strategy: 
         runOnce:     
