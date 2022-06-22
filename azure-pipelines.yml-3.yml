@@ -1,0 +1,95 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-cor
+
+trigger:
+- '*'
+
+pool:
+  name: mypool
+
+variables:
+  buildConfiguration: 'Release'
+  azureSPNName: 'SP_Con' 
+  azureAppServiceName: 'bermtecdev'
+  artifactName: drop
+  appName: 'dotnet-app-dev'
+  appName1: 'dotnet-app-test'
+  isMaster: $[eq(variables['Build.SourceBranch'], 'refs/head/master')]
+  isDev: $[eq(variables['Build.SourceBranch'], 'refs/head/developCICD')]
+  
+
+stages:
+- stage: 'Build'
+  jobs:
+  - job: ''
+    steps:
+    - script: dotnet build --configuration $(buildConfiguration)
+      displayName: 'dotnet build $(buildConfiguration)'
+      
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        arguments: '--configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: true
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: $(artifactName)
+        publishLocation: 'Container'
+
+
+#Publish it to the Azure App Service
+# - task: AzureWebApp@1
+#   inputs:
+#     appType: webAppLinux
+#     azureSubscription: $(azureSPNName) #this is the name of the SPN
+#     appName: $(azureAppServiceName) #App Service's unique name
+#     package: $(Build.ArtifactStagingDirectory)/**/*.zip
+
+ - stage: 'DeployDev'
+   displayName: 'Deploy to Dev'
+   condition: and(succeeded(), eq(variables.isDev, 'true'))
+   jobs:
+   - deployment: 'DeployWeb'
+     displayName: Deploy web app
+     pool:
+       name: mypool
+     environment: 'Dev'
+     strategy: 
+        runOnce:     
+         deploy:
+           steps:
+            - task: AzureRmWebAppDeployment@4
+              displayName: 'Deploy .NET Code to Azure App Service '
+              inputs:
+               ConnectionType: 'AzureRM'
+               azureSubscription: 'SP_Con'   #Azure Service connection name
+               appType: 'webAppLinux'
+               WebAppName: $(appName)
+               packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
+               
+  - stage: 'DeployTest'
+   displayName: 'Deploy to Test'
+   condition: and(succeeded(), eq(variables.isMaster, 'true'))
+   jobs:
+   - deployment: 'DeployWeb'
+     displayname: deploy to web
+     pool:
+       name: mypool
+     environment: 'Test'
+     strategy: 
+        runOnce:     
+         deploy:
+           steps:
+            - task: AzureRmWebAppDeployment@4
+              displayName: 'Deploy .NET Code to Azure App Service '
+              inputs:
+               ConnectionType: 'AzureRM'
+               azureSubscription: 'SP_Con'
+               appType: 'webAppLinux'
+               WebAppName: $(appName1)
+               packageForLinux: '$(Agent.BuildDirectory)/$(artifactName)/$(buildConfiguration)/*.zip'
