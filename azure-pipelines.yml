@@ -9,12 +9,12 @@ trigger:
 - master
 
 pool:
-  name: 'Demo'
+  name: 'mypool'
 
 variables:
   buildConfiguration: 'Release'
   dotNetFramework: 'net6.0'
-  repository: 'walmartpayment'
+  repository: 'bermtechACR'
   namespace: 'walmartdev'
   k8sconnection: 'kubewalmartdev'
   imagePullSecret: 'test'
