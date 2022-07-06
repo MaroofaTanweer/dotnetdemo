@@ -71,7 +71,12 @@ stages:
               action: deploy
               namespace: $(namespace)
               manifests: |
-                $(System.ArtifactsDirectory)/manifests/deployment.yaml
+                $(System.ArtifactsDirectory)/manifests/- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    appType: 'webApp'
+    WebAppName: 
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
                 $(System.ArtifactsDirectory)/manifests/Service.yaml
                 $(System.ArtifactsDirectory)/manifests/Ingress.yaml
               imagePullSecrets: |
