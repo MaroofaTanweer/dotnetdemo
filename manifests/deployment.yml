@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: maroofatanweerdotnetdemo 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maroofatanweerdotnetdemo
+  template:
+    metadata:
+      labels:
+        app: maroofatanweerdotnetdemo 
+    spec:
+      containers:
+        - name: maroofatanweerdotnetdemo 
+          image: bermtechacr.azurecr.io/maroofatanweerdotnetdemo
+          ports:
+          - containerPort: 5000
