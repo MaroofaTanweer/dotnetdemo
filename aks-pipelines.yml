@@ -16,13 +16,8 @@ variables:
   repository: 'bermtechACR'
   namespace: 'walmartdev'
   k8sconnection: 'kubewalmartdev'
-  imagePullSecret: '- task: KubernetesManifest@0
-  inputs:
-    action: 'deploy'
-    kubernetesServiceConnection: 'kubewalmartdev'
-    namespace: 'walmartdev'
-    manifests: 'deployment.yaml,service.yml,Ingress.yml'
-    imagePullSecrets: 'test''
+  imagePullSecret: 'test'
+
 
 stages:
 - stage: 'Build'
