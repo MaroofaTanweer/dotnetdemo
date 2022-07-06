@@ -27,7 +27,7 @@ spec:
           # - Each init container must complete successfully before the next one starts.
       containers:
       - name:  walmartpayment-dev
-        image:  docker.io/raghukom/dotnet6:1.0.0
+        image:  bermtechacr.azurecr.io/bermtechacr:latest
         resources:
           requests:
             cpu:  100m
